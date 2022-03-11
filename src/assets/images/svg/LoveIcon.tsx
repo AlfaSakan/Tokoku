@@ -1,8 +1,12 @@
 import React from 'react';
-import Svg, { Path } from 'react-native-svg';
-import { colors } from '../../colors';
+import Svg, {Path} from 'react-native-svg';
+import {colors} from '../../colors';
 
-export default function LoveIcon({ height = 16, width = 16, colorIcon = colors.danger }) {
+export default function LoveIcon({
+  height = 16,
+  width = 16,
+  colorIcon = colors.danger,
+}) {
   return (
     <Svg width={width} height={height} viewBox="0 0 16 16" fill="none">
       <Path

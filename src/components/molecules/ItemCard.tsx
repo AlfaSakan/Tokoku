@@ -52,7 +52,7 @@ const ItemCard: React.FC<Props> = ({item, index, navigation}) => {
   };
 
   return (
-    <View style={{zIndex: -index}} onTouchEnd={onPressIcon}>
+    <View style={{zIndex: -index}}>
       <Margin margin={10} />
       <View style={styles.containerZIndex}>
         <FlexContainer>

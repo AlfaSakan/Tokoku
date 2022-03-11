@@ -1,5 +1,6 @@
-import AsyncStorageLib from '@react-native-async-storage/async-storage';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
+import {RootStackParamList} from '../../App';
 import {colors} from '../assets/colors';
 import {fontFamily, largeTypography} from '../assets/fonts';
 import BaseContainer from '../components/atoms/BaseContainer';
@@ -7,11 +8,17 @@ import Button from '../components/atoms/Button';
 import Margin from '../components/atoms/Margin';
 import PaddingContainer from '../components/atoms/PaddingContainer';
 import TextInputCustom from '../components/atoms/TextInputCustom';
-// import TypographyText from '../components/atoms/TypographyText';
+import {useAppDispatch} from '../config/redux/app/hooks';
+import {setUserState} from '../config/redux/features/user/userSlice';
+import {setUser} from '../services/user.service';
 import {responsiveHeight} from '../utils/responsiveUI';
 
-const SignUp = () => {
+type Props = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
+
+const SignUp = ({navigation}: Props) => {
   const [storeName, setStoreName] = useState('');
+
+  const dispatch = useAppDispatch();
 
   const buttonText = {
     ...largeTypography,
@@ -19,8 +26,14 @@ const SignUp = () => {
     color: colors.white,
   };
 
-  const onRegister = () => {
-    AsyncStorageLib.setItem('storeName', storeName);
+  const onRegister = async () => {
+    try {
+      dispatch(setUserState(storeName));
+      await setUser(storeName);
+      navigation.replace('BottomNavbarStackScreen', {screen: 'HomeTab'});
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

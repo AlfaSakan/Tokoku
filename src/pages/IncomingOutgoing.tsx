@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {RootStackParamList} from '../../App';
 import {colors} from '../assets/colors';
 import {largeTypography} from '../assets/fonts';
-import {ArrowDownIcon, ArrowLeftIcon} from '../assets/images/svg';
+import {ArrowDownIcon, ArrowUp} from '../assets/images/svg';
 import BaseContainer from '../components/atoms/BaseContainer';
 import Button from '../components/atoms/Button';
 import Margin from '../components/atoms/Margin';
@@ -12,10 +12,7 @@ import TextInputCustom from '../components/atoms/TextInputCustom';
 import Header from '../components/molecules/Header';
 import TextInputIcon from '../components/molecules/TextInputIcon';
 import {useAppDispatch} from '../config/redux/app/hooks';
-import {
-  addAmount,
-  subtractAmount,
-} from '../config/redux/features/item/itemSlice';
+import {updateAmount} from '../config/redux/features/item/itemSlice';
 import {addOrderItem} from '../config/redux/features/orderItem/orderItemSlice';
 import {responsiveHeight} from '../utils/responsiveUI';
 import {titleCase} from '../utils/wordingString';
@@ -27,7 +24,7 @@ const IncomingOutgoing = ({navigation, route}: Props) => {
   const [description, setDescription] = useState('');
   const [isIn, setIsIn] = useState(true);
 
-  const {id, name} = route.params;
+  const {id, name, units} = route.params;
 
   const dispatch = useAppDispatch();
 
@@ -48,17 +45,14 @@ const IncomingOutgoing = ({navigation, route}: Props) => {
       name,
       amount,
       description,
+      units,
+      type: isIn ? 'tambah' : 'kurang',
     };
 
     dispatch(addOrderItem(newItem));
+    dispatch(updateAmount(newItem));
 
-    if (isIn) {
-      dispatch(addAmount(newItem));
-    } else {
-      dispatch(subtractAmount(newItem));
-    }
-
-    navigation.navigate('Stock');
+    navigation.navigate('BottomNavbarStackScreen', {screen: 'Stock'});
   };
 
   const onPressIcon = () => {
@@ -74,12 +68,12 @@ const IncomingOutgoing = ({navigation, route}: Props) => {
           onChangeText={amountHandler}
           label="Masukkan Jumlah Stok"
           placeholder="Jumlah Barang"
-          backgroundColor={isIn ? colors.success : colors.danger}
+          backgroundColor={isIn ? colors.success : colors.lipstick}
           onPress={onPressIcon}>
           {isIn ? (
             <ArrowDownIcon colorIcon={colors.white} />
           ) : (
-            <ArrowLeftIcon colorIcon={colors.white} />
+            <ArrowUp colorIcon={colors.white} />
           )}
         </TextInputIcon>
 

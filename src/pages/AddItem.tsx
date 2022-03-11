@@ -18,7 +18,10 @@ import {useAppDispatch} from '../config/redux/app/hooks';
 import {addNewItem} from '../config/redux/features/item/itemSlice';
 import Header from '../components/molecules/Header';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'AddItem'>;
+type Props = NativeStackScreenProps<
+  RootStackParamList,
+  'BottomNavbarStackScreen'
+>;
 
 const AddItem = ({navigation}: Props) => {
   const [name, setName] = useState('');
@@ -35,25 +38,33 @@ const AddItem = ({navigation}: Props) => {
     setAmounts(Number(value));
   };
 
-  const onPressButton = () => {
-    if (!name || !amounts || !units) {
-      return;
+  const onPressButton = async () => {
+    try {
+      if (!name || !amounts || !units) {
+        return;
+      }
+
+      const newItem = {
+        name: name.toLowerCase(),
+        amounts,
+        units: units.toLowerCase(),
+        description,
+      };
+
+      dispatch(addNewItem(newItem));
+      navigation.navigate('BottomNavbarStackScreen', {screen: 'Stock'});
+    } catch (error) {
+      console.log(error);
     }
-
-    const newItem = {
-      name: name.toLowerCase(),
-      amounts,
-      units: units.toLowerCase(),
-      description,
-    };
-
-    dispatch(addNewItem(newItem));
-    navigation.navigate('Stock');
   };
 
   return (
     <BaseContainer>
-      <Header navigation={navigation} title="Masukkan Barang Baru" />
+      <Header
+        isLeftButton={false}
+        navigation={navigation}
+        title="Masukkan Barang Baru"
+      />
       <PaddingContainer>
         <TextInputCustom
           value={name}
@@ -88,7 +99,6 @@ const AddItem = ({navigation}: Props) => {
           color={colors.white}
           height={responsiveHeight(50)}
           onPress={onPressButton}
-          underlayColor={colors.gray4}
         />
       </PaddingContainer>
     </BaseContainer>

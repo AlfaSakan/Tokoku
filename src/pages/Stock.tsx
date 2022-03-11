@@ -11,8 +11,12 @@ import {RootStackParamList} from '../../App';
 import ItemCard from '../components/molecules/ItemCard';
 import {useIsFocused} from '@react-navigation/native';
 import {ItemDocument} from '../types/itemType';
+import {ScrollView, View} from 'react-native';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Stock'>;
+type Props = NativeStackScreenProps<
+  RootStackParamList,
+  'BottomNavbarStackScreen'
+>;
 
 const Stock = ({navigation}: Props) => {
   const [search, setSearch] = useState('');
@@ -22,29 +26,48 @@ const Stock = ({navigation}: Props) => {
 
   const {items} = useAppSelector(state => state);
 
+  const compareName = (value1: ItemDocument, value2: ItemDocument) => {
+    if (value1.name < value2.name) {
+      return -1;
+    }
+    if (value1.name > value2.name) {
+      return 1;
+    }
+    return 0;
+  };
+
   useEffect(() => {
     const filterItem = items.filter(item =>
       item.name.toLowerCase().includes(search.toLowerCase()),
     );
-    setSearchItem(filterItem);
+    setSearchItem(filterItem.sort(compareName));
   }, [search, isFocused, items]);
 
   return (
     <BaseContainer>
-      <Header navigation={navigation} title="Daftar Barang" />
+      <Header
+        isLeftButton={false}
+        navigation={navigation}
+        title="Daftar Barang"
+      />
       <PaddingContainer>
         <Search value={search} onChangeText={setSearch} />
         <Margin margin={20} />
-        {searchItem.map((item, index) => {
-          return (
-            <ItemCard
-              index={index}
-              item={item}
-              key={index}
-              navigation={navigation}
-            />
-          );
-        })}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View>
+            {searchItem.map((item, index) => {
+              return (
+                <ItemCard
+                  index={index}
+                  item={item}
+                  key={index}
+                  navigation={navigation}
+                />
+              );
+            })}
+            <Margin margin={300} />
+          </View>
+        </ScrollView>
       </PaddingContainer>
     </BaseContainer>
   );

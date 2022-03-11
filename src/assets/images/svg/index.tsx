@@ -41,6 +41,7 @@ import BedStroke from './BedStroke';
 import ClockIcon from './ClockIcon';
 import RepeatIcon from './RepeatIcon';
 import VibratePhone from './VibratePhone';
+import ArrowUp from './ArrowUp';
 
 export {
   AddUserIcon,
@@ -86,4 +87,5 @@ export {
   ClockIcon,
   RepeatIcon,
   VibratePhone,
+  ArrowUp,
 };

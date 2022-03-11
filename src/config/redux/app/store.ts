@@ -1,13 +1,15 @@
 import {configureStore} from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import userReducer from '../features/user/userSlice';
 import itemsReducer from '../features/item/itemSlice';
 import orderItemReducer from '../features/orderItem/orderItemSlice';
+import incomeReducer from '../features/income/incomeSlice';
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    user: userReducer,
     items: itemsReducer,
     orderItem: orderItemReducer,
+    incomesState: incomeReducer,
   },
 });
 

@@ -32,6 +32,7 @@ const TextInputCustom: React.FC<Props> = ({
         onChangeText={onChangeText}
         keyboardType={keyboardType}
         placeholderTextColor={colors.gray2}
+        autoCorrect={false}
       />
     </View>
   );

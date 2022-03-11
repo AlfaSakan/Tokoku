@@ -5,6 +5,8 @@ export interface OrderItemDocument {
   amount: number;
   createdAt?: number;
   description?: string;
+  units: string;
+  type: 'tambah' | 'kurang' | string;
 }
 
 export interface ItemDocument {

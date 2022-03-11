@@ -3,7 +3,10 @@ import React from 'react';
 import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 import {RootStackParamList} from '../../App';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>;
+type Props = NativeStackScreenProps<
+  RootStackParamList,
+  'BottomNavbarStackScreen'
+>;
 
 const Profile = ({navigation}: Props) => {
   return (

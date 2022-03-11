@@ -30,5 +30,6 @@ export default FlexContainer;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
+    zIndex: 1,
   },
 });

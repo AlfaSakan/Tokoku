@@ -1,7 +1,6 @@
 import React from 'react';
-import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
-import Gradient from 'react-native-linear-gradient';
-import { colors } from '../../colors';
+import Svg, {Defs, LinearGradient, Path, Stop} from 'react-native-svg';
+import {colors} from '../../colors';
 
 export default function HomeGradientIcon({
   height = 18,
@@ -23,8 +22,7 @@ export default function HomeGradientIcon({
           y1="22"
           x2="-3.83778"
           y2="20.1374"
-          gradientUnits="userSpaceOnUse"
-        >
+          gradientUnits="userSpaceOnUse">
           <Stop offset="0" stopColor={colorIcon[0]} stopOpacity="1" />
           <Stop offset="1" stopColor={colorIcon[1]} stopOpacity="1" />
         </LinearGradient>

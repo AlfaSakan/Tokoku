@@ -1,97 +1,117 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
-import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
+import React, {useMemo} from 'react';
+import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 
 import {RootStackParamList} from '../../App';
-import {ArrowDown2Icon} from '../assets/images/svg';
+import {colors} from '../assets/colors';
+import {
+  fontFamily,
+  fontSize,
+  largeTypography,
+  lineHeight,
+  smallTypography,
+} from '../assets/fonts';
+import {images} from '../assets/images';
+import BaseContainer from '../components/atoms/BaseContainer';
 import FlexContainer from '../components/atoms/FlexContainer';
 import Margin from '../components/atoms/Margin';
 import PaddingContainer from '../components/atoms/PaddingContainer';
 import TypographyText from '../components/atoms/TypographyText';
+import OrderItemCard from '../components/molecules/OrderItemCard';
+import {useAppSelector} from '../config/redux/app/hooks';
+import {historyTime} from '../utils/dateFormat';
 
-import {useAppDispatch, useAppSelector} from '../config/redux/app/hooks';
-import {incremented} from '../config/redux/features/counter/counterSlice';
+import {responsiveWidth} from '../utils/responsiveUI';
+import {sentenceCase} from '../utils/wordingString';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+type Props = NativeStackScreenProps<
+  RootStackParamList,
+  'BottomNavbarStackScreen'
+>;
 
 const Home = ({navigation}: Props) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isVisible2, setIsVisible2] = useState(false);
+  const {
+    orderItem,
+    user: {storeName},
+  } = useAppSelector(state => state);
 
-  const {counter} = useAppSelector(state => state);
-  const dispatch = useAppDispatch();
+  const seeMoreOrder = () => {
+    navigation.navigate('OrderItemList');
+  };
+
+  const sortOrder = useMemo(() => {
+    return [...orderItem].sort((a, b) => {
+      if (!a.createdAt || !b.createdAt) {
+        return 0;
+      }
+      return b.createdAt - a.createdAt;
+    });
+  }, [orderItem]);
 
   return (
-    <SafeAreaView>
+    <BaseContainer>
       <PaddingContainer>
-        <View>
-          <Text>{counter.value}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              dispatch(incremented());
-              if (counter.value > 5) {
-                navigation.navigate('Profile');
-              }
-            }}>
-            <Text>To Profile Page</Text>
+        <FlexContainer justifyContent="flex-start">
+          <Image
+            source={images.store}
+            resizeMode="contain"
+            style={styles.img}
+          />
+          <View style={styles.marginLeft10}>
+            <TypographyText
+              text={`${storeName}`}
+              fontFamily={fontFamily.poppinsBold}
+              fontSize={fontSize.h4}
+              lineHeight={lineHeight.h4}
+            />
+          </View>
+        </FlexContainer>
+
+        <Margin margin={30} />
+        <FlexContainer>
+          <TypographyText text="Keluar Masuk Barang" {...largeTypography} />
+          <TouchableOpacity onPress={seeMoreOrder}>
+            <TypographyText
+              text="Lainnya"
+              {...smallTypography}
+              color={colors.gray2}
+            />
           </TouchableOpacity>
-          <View style={{backgroundColor: 'red', zIndex: 1}}>
-            <FlexContainer>
-              <TypographyText text="texstkljeflae" />
-              <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
-                <ArrowDown2Icon />
-              </TouchableOpacity>
-            </FlexContainer>
-            {isVisible && (
-              <View
-                style={{
-                  width: 150,
-                  backgroundColor: 'yellow',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'absolute',
-                  right: 0,
-                  top: 25,
-                }}>
-                <TypographyText text="test text" />
-                <TypographyText text="test text" />
-                <TypographyText text="test text" />
-                <TypographyText text="test text" />
-                <TypographyText text="test text" />
-              </View>
-            )}
-          </View>
-          <Margin margin={15} />
-          <View style={{backgroundColor: 'red', zIndex: 0}}>
-            <FlexContainer>
-              <TypographyText text="texstkljeflae" />
-              <TouchableOpacity onPress={() => setIsVisible2(!isVisible2)}>
-                <ArrowDown2Icon />
-              </TouchableOpacity>
-            </FlexContainer>
-            {isVisible2 && (
-              <View
-                style={{
-                  width: 150,
-                  backgroundColor: 'yellow',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  position: 'absolute',
-                  right: 0,
-                  top: 25,
-                }}>
-                <TypographyText text="test text" />
-                <TypographyText text="test text" />
-                <TypographyText text="test text" />
-                <TypographyText text="test text" />
-                <TypographyText text="test text" />
-              </View>
-            )}
-          </View>
-        </View>
+        </FlexContainer>
+        <Margin margin={15} />
+        {sortOrder.map((order, index) => {
+          if (index > 2) {
+            return;
+          }
+
+          const date = historyTime(order.createdAt);
+
+          return (
+            <OrderItemCard
+              key={index}
+              title={sentenceCase(order.name)}
+              colorTitle={
+                order.type === 'tambah' ? colors.success : colors.lipstick
+              }
+              description={`${order.type} ${order.amount} ${
+                order.units ?? ''
+              } | ${date}`}
+            />
+          );
+        })}
       </PaddingContainer>
-    </SafeAreaView>
+    </BaseContainer>
   );
 };
 
 export default Home;
+
+const styles = StyleSheet.create({
+  img: {
+    width: responsiveWidth(25),
+    height: responsiveWidth(25),
+  },
+  marginLeft10: {
+    marginLeft: responsiveWidth(10),
+  },
+});

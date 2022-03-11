@@ -1,5 +1,5 @@
 import React from 'react';
-import {ColorValue, StyleSheet, TouchableHighlight} from 'react-native';
+import {ColorValue, StyleSheet, TouchableOpacity} from 'react-native';
 import {colors} from '../../assets/colors';
 import TypographyText from './TypographyText';
 
@@ -8,7 +8,6 @@ interface Props {
   width?: number | string;
   backgroundColor?: ColorValue;
   onPress?: () => void;
-  underlayColor?: ColorValue;
   text?: string;
   color?: ColorValue;
 }
@@ -17,16 +16,14 @@ const Button: React.FC<Props> = ({
   backgroundColor = colors.blue1,
   height,
   width,
-  underlayColor,
   onPress,
   text = 'Button',
   color,
   ...props
 }) => {
   return (
-    <TouchableHighlight
+    <TouchableOpacity
       onPress={onPress}
-      underlayColor={underlayColor}
       style={[
         styles.button,
         {
@@ -36,7 +33,7 @@ const Button: React.FC<Props> = ({
         },
       ]}>
       <TypographyText text={text} color={color} {...props} />
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 };
 

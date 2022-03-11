@@ -16,6 +16,8 @@ interface Props {
   onPressRight?: () => void;
   navigation?: NativeStackNavigationProp<ParamListBase, string>;
   title?: string;
+  isLeftButton?: boolean;
+  isRightButton?: boolean;
 }
 
 const Header: React.FC<Props> = ({
@@ -23,6 +25,8 @@ const Header: React.FC<Props> = ({
   onPressLeft,
   title = 'Header',
   navigation,
+  isLeftButton = true,
+  isRightButton = true,
 }) => {
   const onBack = () => {
     if (onPressLeft) {
@@ -36,23 +40,31 @@ const Header: React.FC<Props> = ({
   return (
     <View style={styles.container}>
       <FlexContainer>
-        <TouchableOpacity onPress={onBack}>
-          <View style={styles.option}>
-            <ArrowLeft2Icon />
-          </View>
-        </TouchableOpacity>
+        {isLeftButton ? (
+          <TouchableOpacity onPress={onBack}>
+            <View style={styles.option}>
+              <ArrowLeft2Icon />
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <View style={[styles.option, {backgroundColor: colors.white}]} />
+        )}
         <TypographyText
           text={title}
           fontSize={fontSize.largeText}
           lineHeight={lineHeight.largeText}
           fontFamily={fontFamily.poppinsBold}
         />
-        <TouchableOpacity onPress={onPressRight}>
-          <View style={styles.option}>
-            <Dot marginRight={2} />
-            <Dot />
-          </View>
-        </TouchableOpacity>
+        {isRightButton ? (
+          <TouchableOpacity onPress={onPressRight}>
+            <View style={styles.option}>
+              <Dot marginRight={2} />
+              <Dot />
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <View style={[styles.option, {backgroundColor: colors.white}]} />
+        )}
       </FlexContainer>
       <Margin margin={15} />
     </View>

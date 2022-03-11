@@ -7,6 +7,7 @@ interface Props {
   fontSize?: number;
   lineHeight?: number;
   color?: ColorValue;
+  textAlign?: 'auto' | 'center' | 'left' | 'right' | 'justify';
 }
 
 const TypographyText: React.FC<Props> = ({
@@ -15,8 +16,13 @@ const TypographyText: React.FC<Props> = ({
   fontSize,
   lineHeight,
   color,
+  textAlign,
 }) => {
-  return <Text style={{fontFamily, fontSize, lineHeight, color}}>{text}</Text>;
+  return (
+    <Text style={{fontFamily, fontSize, lineHeight, color, textAlign}}>
+      {text}
+    </Text>
+  );
 };
 
 export default TypographyText;

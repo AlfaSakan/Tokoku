@@ -20,4 +20,5 @@ export const colors = {
   blueLinearOpacity: ['#9dceff4d', '#92a3fd4d'],
   purpleLinear: ['#c58bf2', '#eea4ce'],
   purpleLinearOpacity: ['#c58bf24d', '#eea4ce4d'],
+  lipstick: '#ca1a37',
 };

@@ -1,8 +1,12 @@
 import React from 'react';
-import Svg, { Path } from 'react-native-svg';
-import { colors } from '../../colors';
+import Svg, {Path} from 'react-native-svg';
+import {colors} from '../../colors';
 
-export default function ArrowRightIcon({ height = 24, width = 24, colorIcon = colors.gray1 }) {
+export default function ArrowRightIcon({
+  height = 24,
+  width = 24,
+  colorIcon = colors.gray1,
+}) {
   return (
     <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
       <Path
