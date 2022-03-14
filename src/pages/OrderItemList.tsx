@@ -9,7 +9,7 @@ import PaddingContainer from '../components/atoms/PaddingContainer';
 import Header from '../components/molecules/Header';
 import OrderItemCard from '../components/molecules/OrderItemCard';
 import {useAppSelector} from '../config/redux/app/hooks';
-import {diplayDate} from '../utils/dateFormat';
+import {displayDate} from '../utils/dateFormat';
 import {sentenceCase} from '../utils/wordingString';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'OrderItemList'>;
@@ -32,7 +32,7 @@ const OrderItemList = ({navigation}: Props) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <PaddingContainer paddingVertical={30}>
           {sortOrder.map((order, index) => {
-            const date = diplayDate(order.createdAt);
+            const date = displayDate(order.createdAt);
 
             return (
               <OrderItemCard

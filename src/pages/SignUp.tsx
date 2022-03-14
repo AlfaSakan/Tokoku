@@ -49,7 +49,6 @@ const SignUp = ({navigation}: Props) => {
         <Button
           height={responsiveHeight(60)}
           onPress={onRegister}
-          underlayColor={colors.blue2}
           {...buttonText}
         />
       </PaddingContainer>

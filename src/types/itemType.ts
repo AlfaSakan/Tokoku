@@ -3,7 +3,7 @@ export interface OrderItemDocument {
   itemId?: number;
   name: string;
   amount: number;
-  createdAt?: number;
+  createdAt: number;
   description?: string;
   units: string;
   type: 'tambah' | 'kurang' | string;
@@ -16,6 +16,6 @@ export interface ItemDocument {
   units: string;
   img?: any;
   description: string;
-  createdAt?: number;
-  updatedAt?: number;
+  createdAt: number;
+  updatedAt: number;
 }

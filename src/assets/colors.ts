@@ -7,7 +7,7 @@ export const colors = {
   gray2: '#ada4a5',
   gray3: '#dddada',
   gray4: '#f7f8f8',
-  success: '#42D742',
+  success: '#42ba96',
   warning: '#FFD600',
   danger: '#FF0000',
   blue: '#e8f1ff',

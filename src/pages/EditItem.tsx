@@ -37,10 +37,12 @@ const EditItem = ({navigation, route}: Props) => {
       units: units.toLowerCase(),
       description,
       id: itemRoute.id,
+      createdAt: itemRoute.createdAt,
+      updatedAt: 0,
     };
 
     dispatch(updateItem(updatedItem));
-    navigation.navigate('Stock');
+    navigation.navigate('BottomNavbarStackScreen', {screen: 'Stock'});
   };
 
   useEffect(() => {
@@ -81,7 +83,6 @@ const EditItem = ({navigation, route}: Props) => {
           color={colors.white}
           height={responsiveHeight(50)}
           onPress={onPressButton}
-          underlayColor={colors.gray4}
         />
       </PaddingContainer>
     </BaseContainer>

@@ -47,6 +47,7 @@ const IncomingOutgoing = ({navigation, route}: Props) => {
       description,
       units,
       type: isIn ? 'tambah' : 'kurang',
+      createdAt: 0,
     };
 
     dispatch(addOrderItem(newItem));
@@ -92,7 +93,6 @@ const IncomingOutgoing = ({navigation, route}: Props) => {
           color={colors.white}
           height={responsiveHeight(50)}
           onPress={onPressButton}
-          underlayColor={colors.gray4}
         />
       </PaddingContainer>
     </BaseContainer>

@@ -23,7 +23,6 @@ export type RootStackParamList = {
   EditItem: ItemDocument;
   IncomingOutgoing: ItemDocument;
   BottomNavbarStackScreen: NavigatorScreenParams<BottomNavbarStackType>;
-  Feed: {sort: 'latest' | 'top'} | undefined;
   Landing: undefined;
   OrderItemList: undefined;
 };

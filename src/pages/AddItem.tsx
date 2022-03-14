@@ -49,6 +49,8 @@ const AddItem = ({navigation}: Props) => {
         amounts,
         units: units.toLowerCase(),
         description,
+        createdAt: 0,
+        updatedAt: 0,
       };
 
       dispatch(addNewItem(newItem));

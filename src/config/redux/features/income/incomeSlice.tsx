@@ -1,21 +1,13 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {
+  postIncome,
+  removeIncome,
+  updateIncome,
+} from '../../../../services/income.service';
 import {IncomeDocument} from '../../../../types/incomeType';
 import {randomNumber} from '../../../../utils/randomNumber';
 
-const initialState: IncomeDocument[] = [
-  {
-    amount: 1000000,
-    createdAt: new Date().getTime(),
-    description: 'blablablablaba',
-    id: randomNumber(),
-  },
-  {
-    amount: 1000000,
-    createdAt: new Date(2021, 10, 25).getTime(),
-    description: 'blablablablaba',
-    id: randomNumber(),
-  },
-];
+const initialState: IncomeDocument[] = [];
 
 const itemSlice = createSlice({
   name: 'income',
@@ -34,25 +26,37 @@ const itemSlice = createSlice({
       };
 
       state.push(newItem);
+
+      postIncome(newItem);
     },
 
-    updateIncome(state, action: PayloadAction<IncomeDocument>) {
+    updateIncomeState(state, action: PayloadAction<IncomeDocument>) {
+      const updatedAt = new Date().getTime();
+      action.payload.updatedAt = updatedAt;
+
+      console.log(action.payload);
+
       state.forEach((item, index) => {
         if (item.id === action.payload.id) {
-          const updatedAt = new Date().getTime();
-
-          state[index] = {...item, ...action.payload, updatedAt};
+          state[index] = {...item, ...action.payload};
         }
       });
+
+      updateIncome(action.payload);
     },
 
-    removeIncome(state, action: PayloadAction<IncomeDocument>) {
+    removeIncomeState(state, action: PayloadAction<IncomeDocument>) {
       const itemIndex = state.findIndex(item => item.id === action.payload.id);
       state.splice(itemIndex, 1);
+      removeIncome(action.payload);
     },
   },
 });
 
-export const {addIncomesState, addNewIncomeState, removeIncome, updateIncome} =
-  itemSlice.actions;
+export const {
+  addIncomesState,
+  addNewIncomeState,
+  removeIncomeState,
+  updateIncomeState,
+} = itemSlice.actions;
 export default itemSlice.reducer;

@@ -92,7 +92,7 @@ export const formatCalendar = (value: number) => {
   return `${timeToDate(value)} ${timeToMonth(value)} ${timeToYear(value)}`;
 };
 
-export const diplayDate = (value?: number) => {
+export const displayDate = (value?: number) => {
   if (!value) {
     return '';
   }

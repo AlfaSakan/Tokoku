@@ -8,9 +8,11 @@ import {fontFamily, fontSize, lineHeight} from '../assets/fonts';
 import BaseContainer from '../components/atoms/BaseContainer';
 import TypographyText from '../components/atoms/TypographyText';
 import {useAppDispatch} from '../config/redux/app/hooks';
+import {addIncomesState} from '../config/redux/features/income/incomeSlice';
 import {addItems} from '../config/redux/features/item/itemSlice';
 import {addOrderItems} from '../config/redux/features/orderItem/orderItemSlice';
 import {setUserState} from '../config/redux/features/user/userSlice';
+import {getIncome} from '../services/income.service';
 import {getItem} from '../services/item.service';
 import {getOrderItem} from '../services/orderItem.service';
 import {getUser} from '../services/user.service';
@@ -36,6 +38,7 @@ const Landing = ({navigation}: Props) => {
       const user = await getUser();
       const items = await getItem();
       const orderItems = await getOrderItem();
+      const incomes = await getIncome();
 
       if (!user) {
         throw user;
@@ -44,6 +47,7 @@ const Landing = ({navigation}: Props) => {
       dispatch(setUserState(user));
       dispatch(addItems(items));
       dispatch(addOrderItems(orderItems));
+      dispatch(addIncomesState(incomes));
 
       navigation.navigate('BottomNavbarStackScreen', {screen: 'HomeTab'});
     } catch (error) {

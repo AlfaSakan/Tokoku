@@ -1,5 +1,5 @@
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, TouchableOpacity, View} from 'react-native';
 import {RootStackParamList} from '../../App';
 import {colors} from '../assets/colors';
@@ -14,24 +14,36 @@ import Header from '../components/molecules/Header';
 import OrderItemCard from '../components/molecules/OrderItemCard';
 import {useAppDispatch, useAppSelector} from '../config/redux/app/hooks';
 import {responsiveHeight, responsiveWidth} from '../utils/responsiveUI';
-import {addNewIncomeState} from '../config/redux/features/income/incomeSlice';
+import {
+  addNewIncomeState,
+  removeIncomeState,
+  updateIncomeState,
+} from '../config/redux/features/income/incomeSlice';
 import {formatCurrency, removeDot} from '../utils/formatCurrency';
 import {formatCalendar, months, timeToMonth} from '../utils/dateFormat';
 import FlexContainer from '../components/atoms/FlexContainer';
 import Dropdown from '../components/molecules/Dropdown';
+import {IncomeDocument} from '../types/incomeType';
 
 type Props = NativeStackScreenProps<
   RootStackParamList,
   'BottomNavbarStackScreen'
 >;
 
-const pickMonths = ['All', ...months];
+const pickMonths = ['Semua', ...months];
 
 const Income = ({navigation}: Props) => {
   const [input, setInput] = useState('0');
   const [description, setDescription] = useState('');
   const [isDrop, setIsDrop] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState(pickMonths[0]);
+  const [isEdit, setIsEdit] = useState(false);
+  const [selectedValue, setSelectedValue] = useState<IncomeDocument>({
+    amount: 0,
+    description: '',
+    createdAt: 0,
+    updatedAt: 0,
+  });
 
   const {incomesState} = useAppSelector(state => state);
   const dispatch = useAppDispatch();
@@ -47,12 +59,25 @@ const Income = ({navigation}: Props) => {
   };
 
   const addIncomeHandler = async () => {
-    const newIncome = {
-      amount: Number(input),
-      description,
-    };
-    dispatch(addNewIncomeState(newIncome));
-    formatCurrency(`${input}`);
+    try {
+      if (!Number(input)) {
+        return;
+      }
+
+      const newIncome = {
+        amount: Number(input),
+        description,
+        createdAt: 0,
+        updatedAt: 0,
+      };
+
+      dispatch(addNewIncomeState(newIncome));
+
+      setInput('0');
+      setDescription('');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const dropdownHandler = () => {
@@ -63,6 +88,45 @@ const Income = ({navigation}: Props) => {
     setSelectedMonth(value);
     dropdownHandler();
   };
+
+  const cardHandler = (selectedCard: IncomeDocument) => {
+    setInput(`${selectedCard.amount}`);
+    setDescription(selectedCard.description);
+    setSelectedValue(selectedCard);
+    setIsEdit(true);
+  };
+
+  const editHandler = async () => {
+    try {
+      if (!Number(input)) {
+        return;
+      }
+
+      dispatch(updateIncomeState(selectedValue));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeHandler = async () => {
+    try {
+      dispatch(removeIncomeState(selectedValue));
+      newHandler();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const newHandler = () => {
+    setInput('0');
+    setDescription('');
+    setSelectedValue({amount: 0, description: '', createdAt: 0, updatedAt: 0});
+    setIsEdit(false);
+  };
+
+  useEffect(() => {
+    setSelectedValue(prev => ({...prev, amount: Number(input), description}));
+  }, [input, description]);
 
   return (
     <BaseContainer>
@@ -83,12 +147,45 @@ const Income = ({navigation}: Props) => {
         />
 
         <Margin margin={30} />
-        <Button
-          height={responsiveHeight(50)}
-          {...largeTypography}
-          color={colors.white}
-          onPress={addIncomeHandler}
-        />
+        {isEdit ? (
+          <FlexContainer>
+            <Button
+              text="Baru"
+              {...largeTypography}
+              height={responsiveHeight(50)}
+              width="30%"
+              backgroundColor={colors.success}
+              color={colors.white}
+              onPress={newHandler}
+            />
+            <Button
+              text="Ubah"
+              {...largeTypography}
+              height={responsiveHeight(50)}
+              width="30%"
+              backgroundColor={colors.warning}
+              color={colors.white}
+              onPress={editHandler}
+            />
+            <Button
+              text="Hapus"
+              {...largeTypography}
+              height={responsiveHeight(50)}
+              width="30%"
+              backgroundColor={colors.lipstick}
+              color={colors.white}
+              onPress={removeHandler}
+            />
+          </FlexContainer>
+        ) : (
+          <Button
+            height={responsiveHeight(50)}
+            {...largeTypography}
+            color={colors.white}
+            onPress={addIncomeHandler}
+            text="Penghasilan Baru"
+          />
+        )}
       </PaddingContainer>
       <Margin margin={30} />
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -126,7 +223,7 @@ const Income = ({navigation}: Props) => {
 
             if (
               timeToMonth(income.createdAt) !== selectedMonth &&
-              selectedMonth !== 'All'
+              selectedMonth !== pickMonths[0]
             ) {
               return;
             }
@@ -138,6 +235,7 @@ const Income = ({navigation}: Props) => {
                 key={income.id}
                 title={`Rp ${formatCurrency(`${income.amount}`)}`}
                 description={`${date}\n${income.description}`}
+                onPress={() => cardHandler(income)}
               />
             );
           })}
